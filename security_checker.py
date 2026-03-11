@@ -1,6 +1,8 @@
+import sys
 import subprocess
 
 score = 0
+report_data = []
 
 print("=== Linux Security Checker ===\n")
 
@@ -8,12 +10,15 @@ print("=== Linux Security Checker ===\n")
 try:
     firewall = subprocess.check_output("ufw status", shell=True).decode()
     if "Status: active" in firewall:
-        print("[✓] Firewall: ACTIVE")
+        msg = "[✓] Firewall: ACTIVE"
         score += 3
     else:
-        print("[!] Firewall: INACTIVE")
+        msg = "[!] Firewall: INACTIVE"
 except:
-    print("[✓] Firewall: Not detected")
+    msg = "[✓] Firewall: Not detected"
+
+print(msg)
+report_data.append(msg)
 
 
 # Open ports check
@@ -27,13 +32,17 @@ try:
             port = parts[4].split(":")[-1]
             port_list.append(port)
 
-    print("\nOpen Ports:", ", ".join(port_list))
+    port_msg = "Open Ports: " + ", ".join(port_list)
+    print("\n" + port_msg)
+    report_data.append(port_msg)
 
     if len(port_list) <= 5:
         score += 4
 
 except:
-    print("[!] Could not check ports")
+    msg = "[!] Could not check ports"
+    print(msg)
+    report_data.append(msg)
 
 
 # SSH root login check
@@ -42,13 +51,29 @@ try:
         config = file.read()
 
         if "PermitRootLogin no" in config:
-            print("\n[✓] SSH root login: DISABLED")
+            msg = "[✓] SSH root login: DISABLED"
             score += 3
         else:
-            print("\n[!] SSH root login: ENABLED")
+            msg = "[!] SSH root login: ENABLED"
 
 except:
-    print("\n[!] Could not read SSH config")
+    msg = "[!] Could not read SSH config"
+
+print("\n" + msg)
+report_data.append(msg)
 
 
-print(f"\nSecurity Score: {score}/10")
+# Final score
+result = f"\nSecurity Score: {score}/10"
+print(result)
+report_data.append(result)
+
+
+# Report generation
+if "--report" in sys.argv:
+    with open("security_report.txt", "w") as f:
+        f.write("Linux Security Checker Report\n\n")
+        for line in report_data:
+            f.write(line + "\n")
+
+    print("Report saved to security_report.txt")

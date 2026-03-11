@@ -1,0 +1,7 @@
+Linux Security Checker Report
+
+[✓] Firewall: Not detected
+Open Ports: 5353, 5353
+[!] SSH root login: ENABLED
+
+Security Score: 4/10

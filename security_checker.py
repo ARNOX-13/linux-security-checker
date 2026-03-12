@@ -1,79 +1,44 @@
-import sys
-import subprocess
+import argparse
+
+from checks.firewall_check import check_firewall
+from checks.port_check import check_ports
+from checks.ssh_check import check_ssh
+from checks.file_scan import scan_file
+
+parser = argparse.ArgumentParser(
+    description="Linux Security Checker - Basic Linux security auditing tool"
+)
+
+parser.add_argument(
+    "--scan-file",
+    help="Scan a file for known malware signatures"
+)
+
+args = parser.parse_args()
 
 score = 0
-report_data = []
 
 print("=== Linux Security Checker ===\n")
 
-# Firewall check
-try:
-    firewall = subprocess.check_output("ufw status", shell=True).decode()
-    if "Status: active" in firewall:
-        msg = "[✓] Firewall: ACTIVE"
-        score += 3
-    else:
-        msg = "[!] Firewall: INACTIVE"
-except:
-    msg = "[✓] Firewall: Not detected"
-
+# Firewall
+msg, pts = check_firewall()
 print(msg)
-report_data.append(msg)
+score += pts
 
-
-# Open ports check
-try:
-    ports = subprocess.check_output("ss -tuln", shell=True).decode()
-    port_list = []
-
-    for line in ports.split("\n")[1:]:
-        parts = line.split()
-        if len(parts) > 4:
-            port = parts[4].split(":")[-1]
-            port_list.append(port)
-
-    port_msg = "Open Ports: " + ", ".join(port_list)
-    print("\n" + port_msg)
-    report_data.append(port_msg)
-
-    if len(port_list) <= 5:
-        score += 4
-
-except:
-    msg = "[!] Could not check ports"
-    print(msg)
-    report_data.append(msg)
-
-
-# SSH root login check
-try:
-    with open("/etc/ssh/sshd_config", "r") as file:
-        config = file.read()
-
-        if "PermitRootLogin no" in config:
-            msg = "[✓] SSH root login: DISABLED"
-            score += 3
-        else:
-            msg = "[!] SSH root login: ENABLED"
-
-except:
-    msg = "[!] Could not read SSH config"
-
+# Ports
+msg, pts = check_ports()
 print("\n" + msg)
-report_data.append(msg)
+score += pts
 
+# SSH
+msg, pts = check_ssh()
+print("\n" + msg)
+score += pts
+
+# File scan
+if args.scan_file:
+    print("\nScanning file:", args.scan_file)
+    print(scan_file(args.scan_file))
 
 # Final score
-result = f"\nSecurity Score: {score}/10"
-print(result)
-report_data.append(result)
-
-
-# Report generation
-if "--report" in sys.argv:
-    with open("security_report.txt", "w") as f:
-        f.write("Linux Security Checker Report\n\n")
-        for line in report_data:
-            f.write(line + "\n")
-
-    print("Report saved to security_report.txt")
+print(f"\nSecurity Score: {score}/10")

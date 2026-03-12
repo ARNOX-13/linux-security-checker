@@ -1,30 +1,79 @@
 # Linux Security Checker
 
-Linux Security Checker is a simple CLI tool that scans basic security settings on a Linux system and provides a security score.
+Linux Security Checker is a simple command-line tool that audits basic security settings on a Linux system.
+It helps beginners quickly identify common security issues such as open ports, insecure SSH configuration, and missing firewall protection.
 
-It helps beginners quickly audit important security configurations on their Linux machine.
+The tool also includes a basic **signature-based malware scanner** that checks files against known malware signatures.
 
 ---
 
 ## Features
 
-- Detect firewall status
-- List open network ports
-- Check SSH root login configuration
-- Calculate a basic security score
-- Generate a security report
+* Check firewall status
+* Detect open network ports
+* Verify SSH root login configuration
+* Calculate a basic security score
+* Scan files for known malware signatures
+* Modular architecture for easy extension
+* Command-line interface with help support
+
+---
+
+## Project Structure
+
+```
+linux-security-checker
+│
+├── security_checker.py
+├── signatures.txt
+│
+├── checks
+│   ├── __init__.py
+│   ├── firewall_check.py
+│   ├── port_check.py
+│   ├── ssh_check.py
+│   └── file_scan.py
+│
+├── README.md
+├── LICENSE
+└── .gitignore
+```
+
+Each module inside the `checks` directory performs a specific security check, making the project easier to maintain and extend.
+
+---
+
+## Installation
+
+Clone the repository:
+
+```
+git clone https://github.com/ARNOX-13/linux-security-checker.git
+```
+
+Move into the project directory:
+
+```
+cd linux-security-checker
+```
+
+Run the tool:
+
+```
+python3 security_checker.py
+```
 
 ---
 
 ## Usage
 
-Run the security check:
+### Run system security checks
 
-```bash
+```
 python3 security_checker.py
 ```
 
-### Example Output
+Example output:
 
 ```
 === Linux Security Checker ===
@@ -38,42 +87,53 @@ Security Score: 4/10
 
 ---
 
-## Generate Security Report
-
-Run:
-
-```bash
-python3 security_checker.py --report
-```
-
-View the report:
-
-```bash
-cat security_report.txt
-```
-
----
-
-## Project Structure
+### Scan a file for malware signatures
 
 ```
-linux-security-checker
-│
-├── security_checker.py
-├── README.md
-├── LICENSE
-└── security_report.txt
+python3 security_checker.py --scan-file example.txt
+```
+
+Example output:
+
+```
+Scanning file: example.txt
+[!] Malware signature detected: EICAR
 ```
 
 ---
 
-## Why this project?
+### View help menu
 
-Many Linux beginners do not know how to check if their system is secure.  
-This tool helps users quickly audit basic security settings and understand potential risks.
+```
+python3 security_checker.py --help
+```
+
+---
+
+## Malware Signature Detection
+
+The project uses a simple **signature-based detection system**.
+Known malware signatures are stored inside:
+
+```
+signatures.txt
+```
+
+When scanning a file, the program compares its contents against the stored signatures and alerts the user if a match is found.
+
+This concept is similar to how real antivirus tools perform basic malware detection.
+
+---
+
+## Why This Project?
+
+Many Linux beginners are unfamiliar with basic system security checks.
+This tool provides a simple way to quickly audit important security settings and understand potential vulnerabilities on their system.
+
+The modular design also allows developers to easily add additional security checks in the future.
 
 ---
 
 ## License
 
-MIT License
+This project is licensed under the MIT License.

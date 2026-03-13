@@ -1,9 +1,9 @@
 # Linux Security Checker
 
 Linux Security Checker is a simple command-line tool that audits basic security settings on a Linux system.
-It helps beginners quickly identify common security issues such as open ports, insecure SSH configuration, and missing firewall protection.
+It helps users quickly identify common security issues such as open ports, insecure SSH configuration, and missing firewall protection.
 
-The tool also includes a basic **signature-based malware scanner** that checks files against known malware signatures.
+The tool also includes **basic malware detection** using both **signature-based** and **hash-based scanning**.
 
 ---
 
@@ -13,8 +13,9 @@ The tool also includes a basic **signature-based malware scanner** that checks f
 * Detect open network ports
 * Verify SSH root login configuration
 * Calculate a basic security score
-* Scan files for known malware signatures
-* Modular architecture for easy extension
+* Scan files for malware using text signatures
+* Detect malware using SHA256 hash comparison
+* Modular architecture for easier maintenance and scalability
 * Command-line interface with help support
 
 ---
@@ -26,6 +27,7 @@ linux-security-checker
 │
 ├── security_checker.py
 ├── signatures.txt
+├── hash_signatures.txt
 │
 ├── checks
 │   ├── __init__.py
@@ -36,10 +38,11 @@ linux-security-checker
 │
 ├── README.md
 ├── LICENSE
-└── .gitignore
+├── .gitignore
+└── test.txt
 ```
 
-Each module inside the `checks` directory performs a specific security check, making the project easier to maintain and extend.
+Each module inside the `checks` directory performs a specific security check, which improves maintainability and scalability.
 
 ---
 
@@ -47,19 +50,19 @@ Each module inside the `checks` directory performs a specific security check, ma
 
 Clone the repository:
 
-```
+```bash
 git clone https://github.com/ARNOX-13/linux-security-checker.git
 ```
 
 Move into the project directory:
 
-```
+```bash
 cd linux-security-checker
 ```
 
-Run the tool:
+Run the program:
 
-```
+```bash
 python3 security_checker.py
 ```
 
@@ -69,7 +72,7 @@ python3 security_checker.py
 
 ### Run system security checks
 
-```
+```bash
 python3 security_checker.py
 ```
 
@@ -110,27 +113,51 @@ python3 security_checker.py --help
 
 ---
 
-## Malware Signature Detection
+## Malware Detection
 
-The project uses a simple **signature-based detection system**.
-Known malware signatures are stored inside:
+The tool performs **two types of malware detection**.
+
+### Signature-Based Detection
+
+The program checks file contents against known malware signatures stored in:
 
 ```
 signatures.txt
 ```
 
-When scanning a file, the program compares its contents against the stored signatures and alerts the user if a match is found.
+If a match is found, the file is flagged as potentially malicious.
 
-This concept is similar to how real antivirus tools perform basic malware detection.
+---
+
+### Hash-Based Detection
+
+The tool also calculates the **SHA256 hash** of scanned files and compares it against known malicious hashes stored in:
+
+```
+hash_signatures.txt
+```
+
+This technique is commonly used by antivirus software to detect known malware samples.
 
 ---
 
 ## Why This Project?
 
 Many Linux beginners are unfamiliar with basic system security checks.
-This tool provides a simple way to quickly audit important security settings and understand potential vulnerabilities on their system.
+This project aims to provide a simple tool that helps users audit important security settings and understand potential vulnerabilities on their system.
 
-The modular design also allows developers to easily add additional security checks in the future.
+The modular design also allows developers to easily extend the tool with additional security checks.
+
+---
+
+## Future Improvements
+
+Possible enhancements include:
+
+* Colored CLI output for better readability
+* Additional security checks (system updates, weak passwords, etc.)
+* JSON or HTML report export
+* Integration with larger malware signature databases
 
 ---
 

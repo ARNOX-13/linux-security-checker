@@ -1,5 +1,0 @@
-{
-    "firewall": "[!] Firewall: Not installed",
-    "ports": "Open Ports: 5353, 5353",
-    "ssh": "[!] SSH root login: ENABLED"
-}

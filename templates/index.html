@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Linux Security Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Linux Security Checker</h1>
+
+    <div class="card">
+        <form method="POST">
+            <button name="scan_system">Run System Scan</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <button name="scan_file">Scan File</button>
+        </form>
+    </div>
+
+    <div class="results">
+        <h2>Results</h2>
+        {% for r in results %}
+            <p>{{ r }}</p>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>

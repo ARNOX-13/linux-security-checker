@@ -1,9 +1,7 @@
 # Linux Security Checker
 
-Linux Security Checker is a simple command-line tool that audits basic security settings on a Linux system.
-It helps users quickly identify common security issues such as open ports, insecure SSH configuration, and missing firewall protection.
-
-The tool also includes **basic malware detection** using both **signature-based** and **hash-based scanning**.
+Linux Security Checker is a Python-based tool that performs basic security auditing on Linux systems.
+It provides both a **Command Line Interface (CLI)** and a **Web Interface**, making it easy for users to analyze system security and scan files for potential malware.
 
 ---
 
@@ -13,10 +11,10 @@ The tool also includes **basic malware detection** using both **signature-based*
 * Detect open network ports
 * Verify SSH root login configuration
 * Calculate a basic security score
-* Scan files for malware using text signatures
+* Scan files using signature-based malware detection
 * Detect malware using SHA256 hash comparison
-* Modular architecture for easier maintenance and scalability
-* Command-line interface with help support
+* Modular architecture for easy scalability
+* Web-based interface using Flask
 
 ---
 
@@ -25,6 +23,7 @@ The tool also includes **basic malware detection** using both **signature-based*
 ```
 linux-security-checker
 │
+├── app.py
 ├── security_checker.py
 ├── signatures.txt
 ├── hash_signatures.txt
@@ -36,13 +35,16 @@ linux-security-checker
 │   ├── ssh_check.py
 │   └── file_scan.py
 │
+├── templates
+│   └── index.html
+│
+├── static
+│   └── style.css
+│
 ├── README.md
 ├── LICENSE
-├── .gitignore
-└── test.txt
+└── .gitignore
 ```
-
-Each module inside the `checks` directory performs a specific security check, which improves maintainability and scalability.
 
 ---
 
@@ -52,112 +54,107 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/ARNOX-13/linux-security-checker.git
-```
-
-Move into the project directory:
-
-```bash
 cd linux-security-checker
 ```
 
-Run the program:
+Install dependencies:
 
 ```bash
-python3 security_checker.py
+pip install flask colorama
 ```
 
 ---
 
 ## Usage
 
-### Run system security checks
+### CLI Mode
+
+Run system security checks:
 
 ```bash
 python3 security_checker.py
 ```
 
-Example output:
+Scan a file:
 
-```
-=== Linux Security Checker ===
-
-Firewall: Not detected
-Open Ports: 5353
-SSH root login: ENABLED
-
-Security Score: 4/10
-```
-
----
-
-### Scan a file for malware signatures
-
-```
+```bash
 python3 security_checker.py --scan-file example.txt
 ```
 
-Example output:
+View help:
 
-```
-Scanning file: example.txt
-[!] Malware signature detected: EICAR
-```
-
----
-
-### View help menu
-
-```
+```bash
 python3 security_checker.py --help
 ```
 
 ---
 
-## Malware Detection
+### Web Interface
 
-The tool performs **two types of malware detection**.
+Run the Flask app:
+
+```bash
+python3 app.py
+```
+
+Open in browser:
+
+```
+http://127.0.0.1:5000
+```
+
+You can:
+
+* Run system security scans
+* Upload files for malware scanning
+* View results in a clean interface
+
+---
+
+## Malware Detection
 
 ### Signature-Based Detection
 
-The program checks file contents against known malware signatures stored in:
+The tool checks file content against known signatures stored in:
 
 ```
 signatures.txt
 ```
 
-If a match is found, the file is flagged as potentially malicious.
-
 ---
 
-### Hash-Based Detection
+### Hash-Based Detection (SHA256)
 
-The tool also calculates the **SHA256 hash** of scanned files and compares it against known malicious hashes stored in:
+The tool calculates the SHA256 hash of files and compares it against:
 
 ```
 hash_signatures.txt
 ```
 
-This technique is commonly used by antivirus software to detect known malware samples.
+This method is commonly used in antivirus systems.
 
 ---
 
 ## Why This Project?
 
-Many Linux beginners are unfamiliar with basic system security checks.
-This project aims to provide a simple tool that helps users audit important security settings and understand potential vulnerabilities on their system.
+Many Linux users are unaware of basic system security risks.
+This tool provides a simple way to:
 
-The modular design also allows developers to easily extend the tool with additional security checks.
+* audit system configurations
+* detect insecure settings
+* identify potentially malicious files
+
+It also demonstrates core cybersecurity concepts such as system auditing and malware detection.
 
 ---
 
 ## Future Improvements
 
-Possible enhancements include:
-
-* Colored CLI output for better readability
-* Additional security checks (system updates, weak passwords, etc.)
-* JSON or HTML report export
+* JSON report export
+* Colored CLI output
+* Additional security checks
 * Integration with larger malware signature databases
+* Online deployment of web interface
 
 ---
 

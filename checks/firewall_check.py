@@ -8,4 +8,4 @@ def check_firewall():
         else:
             return "[!] Firewall: INACTIVE", 0
     except:
-        return "[✓] Firewall: Not detected", 0
+        return "[!] Firewall: Not installed", 0

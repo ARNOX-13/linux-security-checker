@@ -42,3 +42,19 @@ button:hover {
     padding: 20px;
     border-radius: 10px;
 }
+
+/* Status colors */
+
+.safe {
+    color: #22c55e;
+    font-weight: bold;
+}
+
+.danger {
+    color: #ef4444;
+    font-weight: bold;
+}
+
+.neutral {
+    color: #eab308;
+}

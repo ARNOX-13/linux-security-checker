@@ -24,9 +24,21 @@
 
     <div class="results">
         <h2>Results</h2>
+
         {% for r in results %}
-            <p>{{ r }}</p>
+            <p class="
+                {% if 'ACTIVE' in r or 'DISABLED' in r %}
+                    safe
+                {% elif 'ENABLED' in r or 'detected' in r or 'INACTIVE' in r %}
+                    danger
+                {% else %}
+                    neutral
+                {% endif %}
+            ">
+                {{ r }}
+            </p>
         {% endfor %}
+
     </div>
 </div>
 

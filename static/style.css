@@ -1,7 +1,7 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #0f172a;
-    color: white;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: monospace;
     margin: 0;
 }
 
@@ -9,52 +9,61 @@ body {
     width: 60%;
     margin: auto;
     text-align: center;
-    padding-top: 40px;
+    padding-top: 50px;
 }
 
 h1 {
+    color: #58a6ff;
+}
+
+.subtitle {
+    color: #8b949e;
     margin-bottom: 30px;
 }
 
-.card {
-    background: #1e293b;
-    padding: 20px;
-    margin: 15px 0;
+.terminal-box {
+    background-color: #161b22;
+    padding: 25px;
     border-radius: 10px;
+    border: 1px solid #30363d;
+}
+
+input[type="file"] {
+    color: white;
 }
 
 button {
     padding: 10px 20px;
+    background-color: #238636;
     border: none;
-    background: #22c55e;
-    color: black;
     border-radius: 5px;
     cursor: pointer;
+    color: white;
 }
 
 button:hover {
-    background: #16a34a;
+    background-color: #2ea043;
 }
 
-.results {
-    margin-top: 30px;
-    background: #020617;
-    padding: 20px;
-    border-radius: 10px;
+.output {
+    margin-top: 20px;
+    text-align: left;
 }
-
-/* Status colors */
 
 .safe {
-    color: #22c55e;
-    font-weight: bold;
+    color: #3fb950;
 }
 
 .danger {
-    color: #ef4444;
-    font-weight: bold;
+    color: #f85149;
 }
 
 .neutral {
-    color: #eab308;
+    color: #d29922;
+}
+
+.note {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #8b949e;
 }

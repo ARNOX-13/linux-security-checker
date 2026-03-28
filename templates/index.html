@@ -7,39 +7,40 @@
 <body>
 
 <div class="container">
+
     <h1>Linux Security Checker</h1>
+    <p class="subtitle">File-based Malware Scanner</p>
 
-    <div class="card">
-        <form method="POST">
-            <button name="scan_system">Run System Scan</button>
-        </form>
-    </div>
+    <div class="terminal-box">
 
-    <div class="card">
         <form method="POST" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <button name="scan_file">Scan File</button>
+            <label>> Upload file to scan:</label><br><br>
+            <input type="file" name="file" required>
+            <br><br>
+            <button type="submit">Scan File</button>
         </form>
-    </div>
 
-    <div class="results">
-        <h2>Results</h2>
-
-        {% for r in results %}
-            <p class="
-                {% if 'ACTIVE' in r or 'DISABLED' in r %}
-                    safe
-                {% elif 'ENABLED' in r or 'detected' in r or 'INACTIVE' in r %}
-                    danger
-                {% else %}
-                    neutral
-                {% endif %}
-            ">
-                {{ r }}
-            </p>
-        {% endfor %}
+        {% if result %}
+            <div class="output">
+                <p>> Scan Result:</p>
+                <p class="
+                    {% if '✓' in result %} safe
+                    {% elif '!' in result %} danger
+                    {% else %} neutral
+                    {% endif %}
+                ">
+                    {{ result }}
+                </p>
+            </div>
+        {% endif %}
 
     </div>
+
+    <div class="note">
+        ⚠️ Full system scan is only available via CLI.<br>
+        Run: <code>python3 security_checker.py</code>
+    </div>
+
 </div>
 
 </body>

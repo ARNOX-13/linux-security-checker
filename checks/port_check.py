@@ -11,12 +11,12 @@ def check_ports():
                 port = parts[4].split(":")[-1]
                 port_list.append(port)
 
-        message = "Open Ports: " + ", ".join(port_list)
-
-        if len(port_list) <= 5:
-            return message, 4
+        if port_list:
+            message = "[+] Open Ports           : " + ", ".join(port_list)
         else:
-            return message, 0
+            message = "[+] Open Ports           : None detected"
+
+        return message, 0
 
     except:
-        return "[!] Could not check ports", 0
+        return "[!] Port check not available in this environment", 0

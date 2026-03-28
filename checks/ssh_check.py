@@ -4,9 +4,9 @@ def check_ssh():
             config = file.read()
 
             if "PermitRootLogin no" in config:
-                return "[✓] SSH root login: DISABLED", 3
+                return "[+] SSH Root Login      : DISABLED", 0
             else:
-                return "[!] SSH root login: ENABLED", 0
+                return "[✗] SSH Root Login      : ENABLED", 0
 
     except:
-        return "[!] Could not read SSH config", 0
+        return "[!] SSH configuration not accessible (service not present)", 0

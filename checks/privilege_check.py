@@ -3,48 +3,35 @@ import subprocess
 def check_privileges():
     try:
         result = []
-        score = 0
 
-        # -------- Current User -------- #
         user = subprocess.check_output("whoami", shell=True).decode().strip()
-        result.append(f"Current User: {user}")
+        result.append(f"[✗] Current User        : {user}")
 
-        # -------- Groups -------- #
         groups = subprocess.check_output("groups", shell=True).decode().strip()
-        result.append(f"Groups: {groups}")
+        result.append(f"[!] Group Membership    : {groups}")
 
-        # -------- Check sudo access -------- #
         try:
             sudo_check = subprocess.check_output("sudo -l", shell=True, stderr=subprocess.DEVNULL).decode()
 
             if "may run the following commands" in sudo_check:
-                result.append("[!] User has sudo privileges")
-                score -= 2
+                result.append("[✗] Sudo Privileges     : ENABLED")
             else:
-                result.append("[✓] No sudo privileges detected")
-                score += 2
+                result.append("[+] Sudo Privileges     : DISABLED")
 
         except:
-            result.append("[✓] No sudo privileges detected")
-            score += 2
+            result.append("[+] Sudo Privileges     : DISABLED")
 
-        # -------- Dangerous groups -------- #
         dangerous_groups = ["root", "sudo", "wheel", "admin"]
-
         user_groups = groups.split()
-        risky = []
 
-        for g in user_groups:
-            if g in dangerous_groups:
-                risky.append(g)
+        risky = [g for g in user_groups if g in dangerous_groups]
 
         if risky:
-            result.append(f"[!] Dangerous group membership: {', '.join(risky)}")
-            score -= 2
+            result.append(f"[✗] Dangerous Groups    : {', '.join(risky)}")
         else:
-            result.append("[✓] No dangerous group memberships")
+            result.append("[+] Dangerous Groups    : None")
 
-        return "\n".join(result), score
+        return "\n".join(result), 0
 
-    except Exception as e:
-        return f"[!] Privilege check failed: {str(e)}", 0
+    except:
+        return "[!] Privilege analysis not fully available in this environment", 0

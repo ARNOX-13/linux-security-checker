@@ -40,4 +40,4 @@ def scan_file(file_path):
         return "[✓] No known malware signatures detected"
 
     except Exception as e:
-        return f"[!] Scan error: {str(e)}"
+        return "[!] File scan failed (unable to read file or signatures)"

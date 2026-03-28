@@ -10,4 +10,4 @@ def check_firewall():
             return "[!] Firewall Status      : INACTIVE", 0
 
     except:
-        return "[!] Firewall tool not detected on system", 0
+        return "[!] Firewall not detected or inactive", 0

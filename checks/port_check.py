@@ -11,6 +11,9 @@ def check_ports():
                 port = parts[4].split(":")[-1]
                 port_list.append(port)
 
+        # remove duplicates
+        port_list = list(set(port_list))
+
         if port_list:
             message = "[+] Open Ports           : " + ", ".join(port_list)
         else:

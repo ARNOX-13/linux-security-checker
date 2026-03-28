@@ -1,4 +1,5 @@
 import subprocess
+import subprocess
 
 
 def check_processes():
@@ -10,9 +11,28 @@ def check_processes():
         root_processes = 0
         suspicious = []
 
+        # 🔥 Improved detection (real attack patterns only)
         suspicious_keywords = [
-            "nc", "netcat", "bash -i", "sh -i",
-            "meterpreter", "payload", "reverse", "shell"
+            "nc -e",
+            "netcat -e",
+            "bash -i",
+            "sh -i",
+            "python -c",
+            "perl -e",
+            "php -r",
+            "meterpreter",
+            "/dev/tcp"
+        ]
+
+        # 🔥 Whitelist (avoid false positives)
+        safe_processes = [
+            "systemd",
+            "kworker",
+            "dbus",
+            "timesyncd",
+            "NetworkManager",
+            "gnome",
+            "Xorg"
         ]
 
         for line in lines:
@@ -29,11 +49,18 @@ def check_processes():
                 root_processes += 1
 
             cmd_lower = command.lower()
+
             for keyword in suspicious_keywords:
                 if keyword in cmd_lower:
+
+                    # skip safe processes
+                    if any(safe.lower() in cmd_lower for safe in safe_processes):
+                        continue
+
                     suspicious.append(command)
                     break
 
+        # -------- Output -------- #
         result = []
 
         result.append(f"[+] Total Processes     : {total}")
@@ -52,15 +79,7 @@ def check_processes():
         else:
             result.append("[+] No suspicious processes found")
 
-        score = 0
-
-        if root_processes < total * 0.3:
-            score += 2
-
-        if not suspicious:
-            score += 2
-
-        return "\n".join(result), score
+        return "\n".join(result), 0
 
     except:
         return "[!] Process inspection limited (restricted environment)", 0

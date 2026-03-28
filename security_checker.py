@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 
 from checks.firewall_check import check_firewall
 from checks.port_check import check_ports
@@ -16,18 +17,16 @@ parser = argparse.ArgumentParser(
     description="Linux Security Checker - CLI Tool"
 )
 
-parser.add_argument(
-    "--scan-file",
-    help="Scan a file for malware"
-)
-
-parser.add_argument(
-    "--export-json",
-    action="store_true",
-    help="Export scan results as JSON"
-)
+parser.add_argument("--scan-file", help="Scan a file for malware")
+parser.add_argument("--export-json", action="store_true", help="Export scan results as JSON")
 
 args = parser.parse_args()
+
+
+# ---------------- Root Check (Polished) ---------------- #
+
+if os.geteuid() != 0:
+    print("[!] Running without root privileges — some checks may be limited")
 
 
 # ---------------- Scoring System ---------------- #
@@ -73,7 +72,7 @@ def run_scan(env):
     network_output.append(msg)
 
     if "Open Ports" in msg and env == "local":
-        issues.append(("Open ports detected", "medium"))
+        issues.append(("Open ports detected", "low"))
 
     msg, _ = check_ssh()
     network_output.append(msg)
@@ -91,7 +90,7 @@ def run_scan(env):
         issues.append(("Suspicious processes detected", "high"))
 
     if "Root Processes" in msg and "(High)" in msg:
-        issues.append(("High number of root processes", "medium"))
+        issues.append(("High number of root processes", "low"))
 
     # ===== Privilege Analysis =====
     msg, _ = check_privileges()
@@ -101,17 +100,20 @@ def run_scan(env):
         issues.append(("Running as root user", "medium"))
 
     if "Sudo Privileges" in msg and "ENABLED" in msg:
-        issues.append(("User has sudo privileges", "high"))
+        issues.append(("User has sudo privileges", "low"))
 
     # ===== Final Score =====
     score, reasons = calculate_score(issues)
 
     summary = "\n".join(reasons)
 
+    if not reasons:
+        summary = "[+] System shows no immediate critical threats"
+
     results["Final Security Score"] = (
         f"Score: {score}/10\n\n"
         "Reason:\n"
-        f"{summary if summary else '- No major issues detected'}"
+        f"{summary}"
     )
 
     return results
@@ -142,11 +144,10 @@ def generate_report(env):
     return report
 
 
-# ---------------- Execution Logic ---------------- #
+# ---------------- Execution ---------------- #
 
 env = detect_environment()
 
-# JSON Export
 if args.export_json:
     report = generate_report(env)
 
@@ -157,14 +158,12 @@ if args.export_json:
     exit()
 
 
-# File Scan
 if args.scan_file:
     print("\n=== File Scan ===\n")
     print(scan_file(args.scan_file))
     exit()
 
 
-# Default System Scan
 print("=== Linux Security Checker ===")
 
 if env == "restricted":

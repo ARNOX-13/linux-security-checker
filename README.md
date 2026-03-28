@@ -15,14 +15,14 @@ Linux Security Checker is a modular security auditing tool that analyzes a syste
 - User privileges and potential risks
 - File-based malware detection
 
-The tool is built with a **CLI-first approach** for full system analysis, while the web interface provides a simplified **file scanning demo**.
+The tool is built with a CLI-first approach for full system analysis, while the web interface provides a simplified file scanning demo.
 
 ---
 
 ## 🏗️ Architecture
 
 ### 🔹 CLI Tool (Core System)
-- Main entry point: `security_checker.py`
+- Main entry point: security_checker.py
 - Executes all system-level checks
 - Provides detailed analysis and scoring
 - Designed for real Linux environments
@@ -30,15 +30,17 @@ The tool is built with a **CLI-first approach** for full system analysis, while 
 ---
 
 ### 🌐 Web Interface (Flask)
-- File: `app.py`
+- File: app.py
 - Purpose: File scanning only
 - Runs in restricted environments (e.g., cloud)
 - Does NOT perform system-level checks
 
 ---
 
-### 📦 Modular Design (`checks/`)
+### 📦 Modular Design (checks/)
+
 Each security component is isolated:
+
 checks/
 ├── firewall_check.py
 ├── port_check.py
@@ -52,31 +54,25 @@ checks/
 
 ## ⚙️ How It Works
 
-The tool performs **multi-layer security analysis**:
+The tool performs multi-layer security analysis:
 
-### 🔐 Network Security
+🔐 Network Security
 - Firewall status
 - Open ports
 - SSH root login configuration
 
----
-
-### ⚙️ Process Analysis
+⚙️ Process Analysis
 - Total running processes
 - Root-owned processes
 - Detection of suspicious commands (reverse shells, payloads)
 
----
-
-### 🧑‍💻 Privilege Analysis
+🧑‍💻 Privilege Analysis
 - Current user privileges
 - Group memberships
 - Sudo access
 - Dangerous group detection
 
----
-
-### 🦠 File Scanning
+🦠 File Scanning
 - Signature-based detection
 - SHA256 hash matching
 - Detection of suspicious patterns (e.g., encoded payloads)
@@ -85,36 +81,34 @@ The tool performs **multi-layer security analysis**:
 
 ## ✨ Features
 
-- ✅ Modular architecture
-- ✅ Signature + hash-based malware detection
-- ✅ Process-level behavioral analysis
-- ✅ Privilege escalation risk detection
-- ✅ Environment-aware execution
-- ✅ Balanced and explainable scoring system
-- ✅ Clean CLI output (audit-style)
-- ✅ Minimal web UI for file scanning
+- Modular architecture
+- Signature + hash-based malware detection
+- Process-level behavioral analysis
+- Privilege escalation risk detection
+- Environment-aware execution
+- Balanced and explainable scoring system
+- Clean CLI output (audit-style)
+- Minimal web UI for file scanning
 
 ---
 
 ## 📊 Scoring System
 
-The tool uses a **severity-based scoring model (0–10)**:
+The tool uses a severity-based scoring model (0–10):
 
-| Severity | Impact |
-|----------|--------|
-| Low      | -0.5   |
-| Medium   | -1     |
-| High     | -2     |
-| Critical | -3     |
+Low      → -0.5  
+Medium   → -1  
+High     → -2  
+Critical → -3  
 
-### Example:
+Example:
+
 Score: 6.5/10
 
 Reason:
-
-Firewall is inactive (High impact)
-Open ports detected (Medium impact)
-SSH root login enabled (Critical impact)
+- Firewall is inactive (High impact)
+- Open ports detected (Medium impact)
+- SSH root login enabled (Critical impact)
 
 ✔ Prevents unfair scoring  
 ✔ Provides clear reasoning  
@@ -126,58 +120,48 @@ SSH root login enabled (Critical impact)
 
 The tool detects whether it is running in:
 
-- 🟢 Local system (full access)
-- 🔴 Restricted environment (cloud/container)
+- Local system (full access)
+- Restricted environment (cloud/container)
 
-### Behavior:
-- Skips unsupported checks
-- Avoids misleading errors
-- Displays informative messages:
+Behavior:
+- Skips unsupported checks  
+- Avoids misleading errors  
+- Displays informative messages  
 
 ---
 
 ## ⚠️ Limitations
 
-- Some checks require root privileges
-- Cloud environments may restrict system access
-- Detection is signature-based (not AI/behavioral)
-- False positives possible in process detection
+- Some checks require root privileges  
+- Cloud environments may restrict system access  
+- Detection is signature-based (not AI/behavioral)  
+- False positives possible in process detection  
 
 ---
 
 ## 🛠️ Installation
 
-```bash
-git clone https://github.com/ARNOX-13/linux-security-checker.git
-cd linux-security-checker
+git clone https://github.com/ARNOX-13/linux-security-checker.git  
+cd linux-security-checker  
+
 ---
 
 ## ▶️ Usage
 
-### 🔹 Run Full System Scan (CLI)
+Run full system scan:
+sudo python3 security_checker.py  
 
-sudo python3 security_checker.py
+Scan a file:
+python3 security_checker.py --scan-file <filename>  
 
----
+Export report:
+python3 security_checker.py --export-json  
 
-### 🔹 Scan a File
+Run web interface:
+python3 app.py  
 
-python3 security_checker.py --scan-file <filename>
-
----
-
-### 🔹 Export Report (JSON)
-
-python3 security_checker.py --export-json
-
----
-
-### 🌐 Run Web Interface
-
-python3 app.py
-
-Then open:
-http://127.0.0.1:5000
+Open:
+http://127.0.0.1:5000  
 
 ---
 
@@ -222,7 +206,7 @@ Reason:
 
 ## 📜 License
 
-MIT License
+MIT License  
 
 ---
 

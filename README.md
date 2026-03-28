@@ -1,163 +1,152 @@
-# Linux Security Checker
+# 🔐 Linux Security Checker
 
-Linux Security Checker is a Python-based tool that performs basic security auditing on Linux systems.
-It provides both a **Command Line Interface (CLI)** and a **Web Interface**, making it easy for users to analyze system security and scan files for potential malware.
+A lightweight cybersecurity auditing tool that performs basic Linux security checks through a CLI interface, with an optional web-based file scanner.
 
----
-
-## Features
-
-* Check firewall status
-* Detect open network ports
-* Verify SSH root login configuration
-* Calculate a basic security score
-* Scan files using signature-based malware detection
-* Detect malware using SHA256 hash comparison
-* Modular architecture for easy scalability
-* Web-based interface using Flask
+Designed for beginners and security enthusiasts, this tool provides insights into system security, process behavior, and privilege risks in a simple and understandable format.
 
 ---
 
-## Project Structure
+## 🚀 Project Overview
 
-```
-linux-security-checker
-│
-├── app.py
-├── security_checker.py
-├── signatures.txt
-├── hash_signatures.txt
-│
-├── checks
-│   ├── __init__.py
-│   ├── firewall_check.py
-│   ├── port_check.py
-│   ├── ssh_check.py
-│   └── file_scan.py
-│
-├── templates
-│   └── index.html
-│
-├── static
-│   └── style.css
-│
-├── README.md
-├── LICENSE
-└── .gitignore
-```
+Linux Security Checker is a modular security auditing tool that analyzes a system across multiple layers:
+
+- Network security configuration
+- Running processes and suspicious activity
+- User privileges and potential risks
+- File-based malware detection
+
+The tool is built with a **CLI-first approach** for full system analysis, while the web interface provides a simplified **file scanning demo**.
 
 ---
 
-## Installation
+## 🏗️ Architecture
 
-Clone the repository:
+### 🔹 CLI Tool (Core System)
+- Main entry point: `security_checker.py`
+- Executes all system-level checks
+- Provides detailed analysis and scoring
+- Designed for real Linux environments
+
+---
+
+### 🌐 Web Interface (Flask)
+- File: `app.py`
+- Purpose: File scanning only
+- Runs in restricted environments (e.g., cloud)
+- Does NOT perform system-level checks
+
+---
+
+### 📦 Modular Design (`checks/`)
+Each security component is isolated:
+checks/
+├── firewall_check.py
+├── port_check.py
+├── ssh_check.py
+├── process_check.py
+├── privilege_check.py
+├── file_scan.py
+├── env_check.py
+
+---
+
+## ⚙️ How It Works
+
+The tool performs **multi-layer security analysis**:
+
+### 🔐 Network Security
+- Firewall status
+- Open ports
+- SSH root login configuration
+
+---
+
+### ⚙️ Process Analysis
+- Total running processes
+- Root-owned processes
+- Detection of suspicious commands (reverse shells, payloads)
+
+---
+
+### 🧑‍💻 Privilege Analysis
+- Current user privileges
+- Group memberships
+- Sudo access
+- Dangerous group detection
+
+---
+
+### 🦠 File Scanning
+- Signature-based detection
+- SHA256 hash matching
+- Detection of suspicious patterns (e.g., encoded payloads)
+
+---
+
+## ✨ Features
+
+- ✅ Modular architecture
+- ✅ Signature + hash-based malware detection
+- ✅ Process-level behavioral analysis
+- ✅ Privilege escalation risk detection
+- ✅ Environment-aware execution
+- ✅ Balanced and explainable scoring system
+- ✅ Clean CLI output (audit-style)
+- ✅ Minimal web UI for file scanning
+
+---
+
+## 📊 Scoring System
+
+The tool uses a **severity-based scoring model (0–10)**:
+
+| Severity | Impact |
+|----------|--------|
+| Low      | -0.5   |
+| Medium   | -1     |
+| High     | -2     |
+| Critical | -3     |
+
+### Example:
+Score: 6.5/10
+
+Reason:
+
+Firewall is inactive (High impact)
+Open ports detected (Medium impact)
+SSH root login enabled (Critical impact)
+
+✔ Prevents unfair scoring  
+✔ Provides clear reasoning  
+✔ Reflects real-world risk levels  
+
+---
+
+## 🌍 Environment Awareness
+
+The tool detects whether it is running in:
+
+- 🟢 Local system (full access)
+- 🔴 Restricted environment (cloud/container)
+
+### Behavior:
+- Skips unsupported checks
+- Avoids misleading errors
+- Displays informative messages:
+
+---
+
+## ⚠️ Limitations
+
+- Some checks require root privileges
+- Cloud environments may restrict system access
+- Detection is signature-based (not AI/behavioral)
+- False positives possible in process detection
+
+---
+
+## 🛠️ Installation
 
 ```bash
 git clone https://github.com/ARNOX-13/linux-security-checker.git
 cd linux-security-checker
-```
-
-Install dependencies:
-
-```bash
-pip install flask colorama
-```
-
----
-
-## Usage
-
-### CLI Mode
-
-Run system security checks:
-
-```bash
-python3 security_checker.py
-```
-
-Scan a file:
-
-```bash
-python3 security_checker.py --scan-file example.txt
-```
-
-View help:
-
-```bash
-python3 security_checker.py --help
-```
-
----
-
-### Web Interface
-
-Run the Flask app:
-
-```bash
-python3 app.py
-```
-
-Open in browser:
-
-```
-http://127.0.0.1:5000
-```
-
-You can:
-
-* Run system security scans
-* Upload files for malware scanning
-* View results in a clean interface
-
----
-
-## Malware Detection
-
-### Signature-Based Detection
-
-The tool checks file content against known signatures stored in:
-
-```
-signatures.txt
-```
-
----
-
-### Hash-Based Detection (SHA256)
-
-The tool calculates the SHA256 hash of files and compares it against:
-
-```
-hash_signatures.txt
-```
-
-This method is commonly used in antivirus systems.
-
----
-
-## Why This Project?
-
-Many Linux users are unaware of basic system security risks.
-This tool provides a simple way to:
-
-* audit system configurations
-* detect insecure settings
-* identify potentially malicious files
-
-It also demonstrates core cybersecurity concepts such as system auditing and malware detection.
-
----
-
-## Future Improvements
-
-* JSON report export
-* Colored CLI output
-* Additional security checks
-* Integration with larger malware signature databases
-* Online deployment of web interface
-
----
-
-## License
-
-This project is licensed under the MIT License.

@@ -9,11 +9,12 @@ body {
     width: 60%;
     margin: auto;
     text-align: center;
-    padding-top: 50px;
+    padding-top: 60px;
 }
 
 h1 {
     color: #58a6ff;
+    margin-bottom: 5px;
 }
 
 .subtitle {
@@ -21,15 +22,17 @@ h1 {
     margin-bottom: 30px;
 }
 
-.terminal-box {
+.card {
     background-color: #161b22;
     padding: 25px;
     border-radius: 10px;
     border: 1px solid #30363d;
+    margin-bottom: 20px;
 }
 
-input[type="file"] {
-    color: white;
+.label {
+    font-size: 14px;
+    color: #8b949e;
 }
 
 button {
@@ -45,9 +48,13 @@ button:hover {
     background-color: #2ea043;
 }
 
-.output {
-    margin-top: 20px;
+.result-card {
     text-align: left;
+}
+
+.status {
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .safe {
@@ -62,8 +69,15 @@ button:hover {
     color: #d29922;
 }
 
+.result-text {
+    background-color: #0d1117;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #30363d;
+}
+
 .note {
-    margin-top: 30px;
+    margin-top: 20px;
     font-size: 14px;
     color: #8b949e;
 }

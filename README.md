@@ -150,3 +150,89 @@ The tool detects whether it is running in:
 ```bash
 git clone https://github.com/ARNOX-13/linux-security-checker.git
 cd linux-security-checker
+---
+
+## ▶️ Usage
+
+### 🔹 Run Full System Scan (CLI)
+
+sudo python3 security_checker.py
+
+---
+
+### 🔹 Scan a File
+
+python3 security_checker.py --scan-file <filename>
+
+---
+
+### 🔹 Export Report (JSON)
+
+python3 security_checker.py --export-json
+
+---
+
+### 🌐 Run Web Interface
+
+python3 app.py
+
+Then open:
+http://127.0.0.1:5000
+
+---
+
+## 📌 Example Output
+
+=== Linux Security Checker ===
+
+=== Network Security ===
+[!] Firewall Status      : INACTIVE
+[✗] SSH Root Login      : ENABLED
+
+=== Process Analysis ===
+[+] Total Processes     : 406
+[!] Root Processes      : 299 (High)
+
+[!] Suspicious Processes Detected: 21
+    → nc -lvp 4444
+    → bash -i
+    → sh -i
+
+=== Privilege Analysis ===
+[✗] Current User        : root
+[✗] Sudo Privileges     : ENABLED
+
+=== Final Security Score ===
+Score: 6.5/10
+
+Reason:
+- SSH root login enabled (Critical impact)
+- Suspicious processes detected (High impact)
+
+---
+
+## 🎯 Future Improvements
+
+- Advanced behavioral analysis  
+- Whitelisting to reduce false positives  
+- Integration with real threat intelligence feeds  
+- Dashboard-based UI  
+
+---
+
+## 📜 License
+
+MIT License
+
+---
+
+## 👤 Author
+
+Arnav  
+Cybersecurity Enthusiast | Developer  
+
+---
+
+## ⭐ Final Note
+
+This project focuses on making basic Linux security auditing accessible and understandable, while maintaining a structure inspired by real-world security tools.

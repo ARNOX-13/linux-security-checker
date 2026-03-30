@@ -13,25 +13,20 @@ def index():
     if request.method == "POST":
         file = request.files.get("file")
 
-        if file and file.filename:
-
+        if file:
             try:
-                # 🔥 Create temporary file (safe for Vercel)
-                with tempfile.NamedTemporaryFile(delete=False) as temp:
-                    file.save(temp.name)
-                    temp_path = temp.name
+                temp = tempfile.NamedTemporaryFile(delete=False)
+                file.save(temp.name)
 
-                # Run scan
-                result = scan_file(temp_path)
+                result = scan_file(temp.name)
 
-                # Cleanup
-                os.remove(temp_path)
+                temp.close()
+                os.remove(temp.name)
 
-            except Exception as e:
-                result = "[!] File processing failed (server restriction)"
+            except:
+                result = "[!] File upload failed (server restriction)"
 
     return render_template("index.html", result=result)
 
 
-# Required for Vercel
 app = app

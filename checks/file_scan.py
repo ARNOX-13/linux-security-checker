@@ -1,52 +1,54 @@
-if not os.path.exists("signatures.txt"):
-    return "[!] Signature database not available"
-
-with open("signatures.txt", "r") as sig_file:import hashlib
+import hashlib
 import os
- 
+
 def scan_file(file_path):
 
-    if not os.path.exists(file_path):
-        return "[!] File not found"
-
     try:
-        # -------- Signature Detection -------- #
-        if not os.path.exists("signatures.txt"):   
-		 return "[!] Signature database not available"	
-		
-	if not os.path.exists("signatures.txt"):
-	    return "[!] Signature database not available"
-	with open("signatures.txt", "r") as sig_file:
-        
-    signatures = sig_file.read().splitlines()
+        # File exists?
+        if not os.path.exists(file_path):
+            return "[!] File not found"
 
-        with open(file_path, "r", errors="ignore") as target:
-            content = target.read()
+        # Read file safely
+        try:
+            with open(file_path, "r", errors="ignore") as f:
+                content = f.read()
+        except:
+            return "[!] Unable to read file"
 
         content_lower = content.lower()
+
+        # Safe signature handling
         matches = []
 
-        for sig in signatures:
-            sig_lower = sig.lower()
-            if sig_lower in content_lower:
-                matches.append(sig)
+        if os.path.exists("signatures.txt"):
+            try:
+                with open("signatures.txt", "r") as sig_file:
+                    signatures = sig_file.read().splitlines()
+
+                for sig in signatures:
+                    if sig.lower() in content_lower:
+                        matches.append(sig)
+            except:
+                pass
 
         if matches:
-            matches = list(set(matches))  # remove duplicates
-            return f"[!] Suspicious patterns detected: {', '.join(matches)}"
+            return f"[!] Suspicious patterns detected: {', '.join(set(matches))}"
 
-        # -------- Hash Detection -------- #
-        with open(file_path, "rb") as f:
-            file_hash = hashlib.sha256(f.read()).hexdigest()
+        # Hash check (safe)
+        try:
+            with open(file_path, "rb") as f:
+                file_hash = hashlib.sha256(f.read()).hexdigest()
 
-        if os.path.exists("hash_signatures.txt"):
-            with open("hash_signatures.txt", "r") as hash_file:
-                hashes = hash_file.read().splitlines()
+            if os.path.exists("hash_signatures.txt"):
+                with open("hash_signatures.txt", "r") as h:
+                    hashes = h.read().splitlines()
 
-            if file_hash in hashes:
-                return "[!] Known malicious file detected (SHA256 match)"
+                if file_hash in hashes:
+                    return "[!] Known malicious file detected (SHA256 match)"
+        except:
+            pass
 
-        return "[✓] No known malware signatures detected"
+        return "[+] No known malware signatures detected"
 
-    except Exception as e:
-        return "[!] File scan failed (unable to read file or signatures)"
+    except:
+        return "[!] Scan failed (restricted environment)"

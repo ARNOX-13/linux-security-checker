@@ -1,0 +1,11 @@
+eval(base64_decode
+cmd.exe
+powershell -enc
+nc -e
+bash -i
+sh -i
+python -c
+perl -e
+php -r
+wget http
+curl http

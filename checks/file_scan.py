@@ -1,6 +1,6 @@
 import hashlib
 import os
-
+ 
 def scan_file(file_path):
 
     if not os.path.exists(file_path):
@@ -8,7 +8,10 @@ def scan_file(file_path):
 
     try:
         # -------- Signature Detection -------- #
-        with open("signatures.txt", "r") as sig_file:
+        if not os.path.exists("signatures.txt"):   
+		 return "[!] Signature database not available"	
+		
+	with open("signatures.txt", "r") as sig_file:
             signatures = sig_file.read().splitlines()
 
         with open(file_path, "r", errors="ignore") as target:

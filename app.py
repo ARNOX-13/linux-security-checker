@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from checks.file_scan import scan_file
+import tempfile
 import os
 
 app = Flask(__name__)
@@ -13,12 +14,21 @@ def index():
         file = request.files.get("file")
 
         if file and file.filename:
-            filepath = file.filename
-            file.save(filepath)
 
-            result = scan_file(filepath)
+            try:
+                # 🔥 Create temporary file (safe for Vercel)
+                with tempfile.NamedTemporaryFile(delete=False) as temp:
+                    file.save(temp.name)
+                    temp_path = temp.name
 
-            os.remove(filepath)
+                # Run scan
+                result = scan_file(temp_path)
+
+                # Cleanup
+                os.remove(temp_path)
+
+            except Exception as e:
+                result = "[!] File processing failed (server restriction)"
 
     return render_template("index.html", result=result)
 
